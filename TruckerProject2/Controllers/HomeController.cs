@@ -14,11 +14,34 @@ namespace TruckerProject2.Controllers
         private TruckerDbEntities db = new TruckerDbEntities();
 
         // GET: Truckers
-        public ActionResult Index(string searchCriteria)
+        public ActionResult Index()
         {
-            List<Trucker> truckers = db.Truckers.Where(p => p.FirstName.Contains(searchCriteria)).ToList();
-            IndexViewModel indexViewModel = new IndexViewModel(truckers, db.Licenses.ToList(), searchCriteria);
+            IndexViewModel indexViewModel = new IndexViewModel(db.Truckers.ToList(), db.Licenses.ToList());
                 
+            return View(indexViewModel);
+        }
+
+
+        [HttpPost, ActionName("Index")]
+        public ActionResult Index(string searchCriteria, string searchProperty)
+        {
+            List<Trucker> truckers;
+            switch(searchProperty)
+            {
+                case "FirstName":
+                    truckers = db.Truckers.Where(p => p.FirstName.Contains(searchCriteria)).ToList();
+                    break;
+                case "LastName":
+                    truckers = db.Truckers.Where(p => p.LastName.Contains(searchCriteria)).ToList();
+                    break;
+                default:
+                    truckers = db.Truckers.ToList();
+                    break;
+            }
+            
+            
+            IndexViewModel indexViewModel = new IndexViewModel(truckers, db.Licenses.ToList(), searchCriteria);
+
             return View(indexViewModel);
         }
 

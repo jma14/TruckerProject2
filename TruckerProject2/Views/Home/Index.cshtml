@@ -1,0 +1,109 @@
+﻿@model TruckerProject2.ViewModels.IndexViewModel
+
+@{
+    ViewBag.Title = "Trucker List";
+}
+
+<h1>Trucker List</h1>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+    <br />
+</p>
+<p>
+    @using (Html.BeginForm())
+    {
+        <div class="form-group">
+            <input type="text" value="" name="searchCriteria" class="form-control" /><button type="submit" value="Index" class="btn btn-lg btn-primary">Search</button>
+        </div>
+    }
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Truckers.FirstOrDefault().FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Truckers.FirstOrDefault().LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Truckers.FirstOrDefault().Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Truckers.FirstOrDefault().City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Truckers.FirstOrDefault().State)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Truckers.FirstOrDefault().Zip)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Truckers.FirstOrDefault().LicenseNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Truckers.FirstOrDefault().ExpirationDate)
+        </th>
+        @foreach (var licenseType in Model.Licenses)
+        {
+            <th>
+                @Html.DisplayNameFor(modelItem => licenseType.LicenseType)
+                @Html.DisplayFor(modelItem => licenseType.LicenseType)
+            </th>
+        }
+    </tr>
+
+    @foreach( var trucker in Model.Truckers)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = trucker.TruckerID })
+                @Html.ActionLink("Delete", "Delete", new { id = trucker.TruckerID })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => trucker.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => trucker.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => trucker.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => trucker.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => trucker.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => trucker.Zip)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => trucker.LicenseNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => trucker.ExpirationDate)
+            </td>
+            @foreach (var license in Model.Licenses)
+            {
+                if(trucker.Licenses.Contains(license))
+                {
+                    <td>
+                        Yes
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        No
+                    </td>
+                }
+
+            }
+            
+        </tr>
+    }
+</table>

@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TruckerDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Licenses">
+          <Key>
+            <PropertyRef Name="LicenseType" />
+          </Key>
+          <Property Name="LicenseType" Type="varchar" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="States">
+          <Key>
+            <PropertyRef Name="StateID" />
+          </Key>
+          <Property Name="StateID" Type="varchar" MaxLength="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TruckerLicense">
+          <Key>
+            <PropertyRef Name="TruckerID" />
+            <PropertyRef Name="LicenseType" />
+          </Key>
+          <Property Name="TruckerID" Type="int" Nullable="false" />
+          <Property Name="LicenseType" Type="varchar" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Truckers">
+          <Key>
+            <PropertyRef Name="TruckerID" />
+          </Key>
+          <Property Name="TruckerID" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="City" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="State" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="Zip" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LicenseNumber" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ExpirationDate" Type="date" Nullable="false" />
+        </EntityType>
+        <Association Name="LicenseType">
+          <End Role="Licenses" Type="Self.Licenses" Multiplicity="1" />
+          <End Role="TruckerLicense" Type="Self.TruckerLicense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Licenses">
+              <PropertyRef Name="LicenseType" />
+            </Principal>
+            <Dependent Role="TruckerLicense">
+              <PropertyRef Name="LicenseType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TruckerID">
+          <End Role="Truckers" Type="Self.Truckers" Multiplicity="1" />
+          <End Role="TruckerLicense" Type="Self.TruckerLicense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Truckers">
+              <PropertyRef Name="TruckerID" />
+            </Principal>
+            <Dependent Role="TruckerLicense">
+              <PropertyRef Name="TruckerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TruckerDbModelStoreContainer">
+          <EntitySet Name="Licenses" EntityType="Self.Licenses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="States" EntityType="Self.States" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TruckerLicense" EntityType="Self.TruckerLicense" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Truckers" EntityType="Self.Truckers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="LicenseType" Association="Self.LicenseType">
+            <End Role="Licenses" EntitySet="Licenses" />
+            <End Role="TruckerLicense" EntitySet="TruckerLicense" />
+          </AssociationSet>
+          <AssociationSet Name="TruckerID" Association="Self.TruckerID">
+            <End Role="Truckers" EntitySet="Truckers" />
+            <End Role="TruckerLicense" EntitySet="TruckerLicense" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TruckerDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="License">
+          <Key>
+            <PropertyRef Name="LicenseType" />
+          </Key>
+          <Property Name="LicenseType" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Truckers" Relationship="Self.TruckerLicense" FromRole="Licenses" ToRole="Truckers" />
+        </EntityType>
+        <EntityType Name="Trucker">
+          <Key>
+            <PropertyRef Name="TruckerID" />
+          </Key>
+          <Property Name="TruckerID" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Licenses" Relationship="Self.TruckerLicense" FromRole="Truckers" ToRole="Licenses" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="Zip" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LicenseNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ExpirationDate" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <Association Name="TruckerLicense">
+          <End Role="Licenses" Type="Self.License" Multiplicity="*" />
+          <End Role="Truckers" Type="Self.Trucker" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="TruckerDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Licenses" EntityType="Self.License" />
+          <EntitySet Name="Truckers" EntityType="Self.Trucker" />
+          <AssociationSet Name="TruckerLicense" Association="Self.TruckerLicense">
+            <End Role="Licenses" EntitySet="Licenses" />
+            <End Role="Truckers" EntitySet="Truckers" />
+          </AssociationSet>
+          <EntitySet Name="States" EntityType="TruckerDbModel.State" />
+        </EntityContainer>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="StateID" />
+          </Key>
+          <Property Name="StateID" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TruckerDbModelStoreContainer" CdmEntityContainer="TruckerDbEntities">
+          <EntitySetMapping Name="Licenses">
+            <EntityTypeMapping TypeName="TruckerDbModel.License">
+              <MappingFragment StoreEntitySet="Licenses">
+                <ScalarProperty Name="LicenseType" ColumnName="LicenseType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Truckers">
+            <EntityTypeMapping TypeName="TruckerDbModel.Trucker">
+              <MappingFragment StoreEntitySet="Truckers">
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="LicenseNumber" ColumnName="LicenseNumber" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="TruckerID" ColumnName="TruckerID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="TruckerLicense" TypeName="TruckerDbModel.TruckerLicense" StoreEntitySet="TruckerLicense">
+            <EndProperty Name="Licenses">
+              <ScalarProperty Name="LicenseType" ColumnName="LicenseType" />
+            </EndProperty>
+            <EndProperty Name="Truckers">
+              <ScalarProperty Name="TruckerID" ColumnName="TruckerID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="States">
+            <EntityTypeMapping TypeName="TruckerDbModel.State">
+              <MappingFragment StoreEntitySet="States">
+              <ScalarProperty Name="StateID" ColumnName="StateID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

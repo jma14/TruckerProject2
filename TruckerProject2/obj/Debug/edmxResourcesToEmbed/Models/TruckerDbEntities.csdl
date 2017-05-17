@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TruckerDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="License">
+    <Key>
+      <PropertyRef Name="LicenseType" />
+    </Key>
+    <Property Name="LicenseType" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Truckers" Relationship="Self.TruckerLicense" FromRole="Licenses" ToRole="Truckers" />
+  </EntityType>
+  <EntityType Name="Trucker">
+    <Key>
+      <PropertyRef Name="TruckerID" />
+    </Key>
+    <Property Name="TruckerID" Type="Int32" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Licenses" Relationship="Self.TruckerLicense" FromRole="Truckers" ToRole="Licenses" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="City" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="State" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="Zip" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LicenseNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ExpirationDate" Type="DateTime" Nullable="false" Precision="0" />
+  </EntityType>
+  <Association Name="TruckerLicense">
+    <End Role="Licenses" Type="Self.License" Multiplicity="*" />
+    <End Role="Truckers" Type="Self.Trucker" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="TruckerDbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Licenses" EntityType="Self.License" />
+    <EntitySet Name="Truckers" EntityType="Self.Trucker" />
+    <AssociationSet Name="TruckerLicense" Association="Self.TruckerLicense">
+      <End Role="Licenses" EntitySet="Licenses" />
+      <End Role="Truckers" EntitySet="Truckers" />
+    </AssociationSet>
+    <EntitySet Name="States" EntityType="TruckerDbModel.State" />
+  </EntityContainer>
+  <EntityType Name="State">
+    <Key>
+      <PropertyRef Name="StateID" />
+    </Key>
+    <Property Name="StateID" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>

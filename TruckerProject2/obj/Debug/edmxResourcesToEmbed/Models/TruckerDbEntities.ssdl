@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TruckerDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Licenses">
+    <Key>
+      <PropertyRef Name="LicenseType" />
+    </Key>
+    <Property Name="LicenseType" Type="varchar" MaxLength="1" Nullable="false" />
+  </EntityType>
+  <EntityType Name="States">
+    <Key>
+      <PropertyRef Name="StateID" />
+    </Key>
+    <Property Name="StateID" Type="varchar" MaxLength="2" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TruckerLicense">
+    <Key>
+      <PropertyRef Name="TruckerID" />
+      <PropertyRef Name="LicenseType" />
+    </Key>
+    <Property Name="TruckerID" Type="int" Nullable="false" />
+    <Property Name="LicenseType" Type="varchar" MaxLength="1" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Truckers">
+    <Key>
+      <PropertyRef Name="TruckerID" />
+    </Key>
+    <Property Name="TruckerID" Type="int" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Address" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="City" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="State" Type="varchar" MaxLength="2" Nullable="false" />
+    <Property Name="Zip" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="LicenseNumber" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="ExpirationDate" Type="date" Nullable="false" />
+  </EntityType>
+  <Association Name="LicenseType">
+    <End Role="Licenses" Type="Self.Licenses" Multiplicity="1" />
+    <End Role="TruckerLicense" Type="Self.TruckerLicense" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Licenses">
+        <PropertyRef Name="LicenseType" />
+      </Principal>
+      <Dependent Role="TruckerLicense">
+        <PropertyRef Name="LicenseType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TruckerID">
+    <End Role="Truckers" Type="Self.Truckers" Multiplicity="1" />
+    <End Role="TruckerLicense" Type="Self.TruckerLicense" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Truckers">
+        <PropertyRef Name="TruckerID" />
+      </Principal>
+      <Dependent Role="TruckerLicense">
+        <PropertyRef Name="TruckerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TruckerDbModelStoreContainer">
+    <EntitySet Name="Licenses" EntityType="Self.Licenses" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="States" EntityType="Self.States" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TruckerLicense" EntityType="Self.TruckerLicense" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Truckers" EntityType="Self.Truckers" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="LicenseType" Association="Self.LicenseType">
+      <End Role="Licenses" EntitySet="Licenses" />
+      <End Role="TruckerLicense" EntitySet="TruckerLicense" />
+    </AssociationSet>
+    <AssociationSet Name="TruckerID" Association="Self.TruckerID">
+      <End Role="Truckers" EntitySet="Truckers" />
+      <End Role="TruckerLicense" EntitySet="TruckerLicense" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

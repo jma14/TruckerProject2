@@ -25,6 +25,7 @@ namespace TruckerProject2.Controllers
         [HttpPost, ActionName("Index")]
         public ActionResult Index(string searchCriteria, string searchProperty)
         {
+
             List<Trucker> truckers;
             switch(searchProperty)
             {
@@ -34,11 +35,25 @@ namespace TruckerProject2.Controllers
                 case "LastName":
                     truckers = db.Truckers.Where(p => p.LastName.Contains(searchCriteria)).ToList();
                     break;
+                case "Address":
+                    truckers = db.Truckers.Where(p => p.Address.Contains(searchCriteria)).ToList();
+                    break;
+                case "City":
+                    truckers = db.Truckers.Where(p => p.City.Contains(searchCriteria)).ToList();
+                    break;
+                case "State":
+                    truckers = db.Truckers.Where(p => p.State.Contains(searchCriteria)).ToList();
+                    break;
+                case "Zip":
+                    truckers = db.Truckers.Where(p => p.Zip.Contains(searchCriteria)).ToList();
+                    break;
+                case "LicenseNumber":
+                    truckers = db.Truckers.Where(p => p.LicenseNumber.Contains(searchCriteria)).ToList();
+                    break;
                 default:
                     truckers = db.Truckers.ToList();
                     break;
             }
-            
             
             IndexViewModel indexViewModel = new IndexViewModel(truckers, db.Licenses.ToList(), searchCriteria);
 
@@ -121,5 +136,8 @@ namespace TruckerProject2.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        [HttpPost, ActionName("NewLicense")]
+        public ActionResult Index()
     }
 }

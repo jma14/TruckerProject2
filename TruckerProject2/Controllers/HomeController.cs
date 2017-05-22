@@ -109,9 +109,12 @@ namespace TruckerProject2.Controllers
             Trucker dbTrucker = db.Truckers.Find(id);
             if (ModelState.IsValid)
             {
-                foreach (var license in licenseList)
-                {
-                    trucker.Licenses.Add(db.Licenses.Where(p => p.LicenseType == license).FirstOrDefault());
+                if(licenseList != null)
+                { 
+                    foreach (var license in licenseList)
+                    {
+                        trucker.Licenses.Add(db.Licenses.Where(p => p.LicenseType == license).FirstOrDefault());
+                    }
                 }
                 db.Database.ExecuteSqlCommand("DELETE FROM dbo.TruckerLicense WHERE TruckerID = {0}", trucker.TruckerID);
                 db.Truckers.Remove(dbTrucker);
@@ -137,7 +140,20 @@ namespace TruckerProject2.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost, ActionName("NewLicense")]
-        public ActionResult Index()
+        [HttpPost, ActionName("AddLicense")]
+        public ActionResult AddLicense(string addLicense)
+        {
+            License license = new License { LicenseType = addLicense.ToUpper() };
+            try
+            {
+                db.Licenses.Add(license);
+                db.SaveChanges();
+            }
+            catch
+            {
+            }
+            return RedirectToAction("Index");
+        }
+
     }
 }
